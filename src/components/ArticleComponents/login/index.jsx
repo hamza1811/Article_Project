@@ -7,6 +7,11 @@ import { isLoading } from "../../../redux/Article/article-selectors";
 
 import { styles } from "../../../styles";
 import ArticleLoading from "../Article/ArticleLoading";
+import Modal from "react-bootstrap/Modal";
+// import "bootstrap/dist/css/bootstrap.min.css";
+
+import firebase from "firebase";
+import Swal from "sweetalert2";
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -24,6 +29,8 @@ const mapStateToProps = (state) => {
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isResetClicked, setIsResetClicked] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -33,6 +40,19 @@ function Login(props) {
   React.useEffect(() => {
     props.isAuthenticated && props.history.push("/");
   });
+
+  const forgotPassword = (Email) => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(Email)
+      .then(() => {
+        Swal.fire("Great!", "Check your email", "success");
+      })
+      .catch((error) => {
+        const { message } = error;
+        Swal.fire("Sorry!", message, "error");
+      });
+  };
 
   return (
     <div className='container'>
@@ -67,17 +87,12 @@ function Login(props) {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className='custom-control custom-checkbox mb-3 pt-4'>
-                  <input
-                    type='checkbox'
-                    className='custom-control-input'
-                    id='customCheck1'
-                  />
-                  <label
-                    className='custom-control-label'
-                    htmlFor='customCheck1'>
-                    Remember password
-                  </label>
+                <div className='mb-3 pt-4'>
+                  <span
+                    onClick={() => setIsResetClicked(true)}
+                    style={{ cursor: "pointer", color: "#007bff" }}>
+                    Forgot Password ?
+                  </span>
                 </div>
                 {props.isLoading ? (
                   <ArticleLoading />
@@ -93,6 +108,42 @@ function Login(props) {
           </div>
         </div>
       </div>
+      {isResetClicked && (
+        <Modal show={isResetClicked}>
+          <Modal.Header>Reset Your Password</Modal.Header>
+          {/* <Modal.Close>X</Modal.Close> */}
+          <Modal.Body>
+            <div className='form-label-group pt-4 py-4'>
+              <label htmlFor='inputEmail'>Email address</label>
+              <input
+                type='email'
+                className='form-control'
+                // id='inputEmail'
+                placeholder='Enter Email..'
+                required
+                autoFocus
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+              />
+            </div>
+            <div className='contanier'>
+              <div className='row' style={{ justifyContent: "center" }}>
+                <button
+                  className='btn btn-md btn-secondary text-uppercase mr-2'
+                  onClick={() => setIsResetClicked(false)}>
+                  Cancel
+                </button>
+                <button
+                  className='btn btn-md btn-primary text-uppercase'
+                  type='button'
+                  onClick={() => forgotPassword(resetEmail)}>
+                  Reset
+                </button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
     </div>
   );
 }

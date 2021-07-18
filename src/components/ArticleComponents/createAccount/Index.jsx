@@ -3,8 +3,9 @@ import { addUser } from "../../../redux/ArticleUsers/user-action";
 import { connect } from "react-redux";
 // import SweetAlert from 'sweetalert2-react';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import ArticleLoading from "../Article/ArticleLoading";
-
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./index.css";
 const mapDispatchToProps = (dispatch) => {
   return {
     addUser: (user) => dispatch(addUser(user)),
@@ -15,6 +16,11 @@ function CreateAccount(props) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const togglePasswordVisiblity = () => {
+    setPasswordShown(passwordShown ? false : true);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -69,17 +75,22 @@ function CreateAccount(props) {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                <div className='form-label-group pt-4'>
+                <div className='form-label-group pt-4 password-wrapper'>
                   {/* <input type="password" id="inputPassword" className="form-control" placeholder="Password" required /> */}
                   <label htmlFor='inputPassword'>Password</label>
                   <input
-                    type='password'
+                    type={passwordShown ? "text" : "password"}
                     className='form-control'
                     id='inputPassword'
                     placeholder='Enter Password...'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <i className='eye-icon' onClick={togglePasswordVisiblity}>
+                    <FontAwesomeIcon
+                      icon={passwordShown ? faEyeSlash : faEye}
+                    />
+                  </i>
                 </div>
                 <button
                   className='btn btn-lg btn-primary btn-block text-uppercase mt-4'
