@@ -17,12 +17,6 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loading: action.payload,
             }
-        // case SEARCH_Article_BY_TITLE: {
-        //     return {
-        //         ...state,
-
-        //     }
-        // }
         default:
             return state;
     }
