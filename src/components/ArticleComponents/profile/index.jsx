@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
 import { updateUserData } from "../../../redux/ArticleUsers/user-action";
 import CountOfYourArticle from "./CountOfYourArticle";
-import { loggedInUserData } from "../../../redux/ArticleUsers/UserSelectors";
-import { isLoading } from "../../../redux/Article/ArticleSelectors";
+import { loggedInUserData } from "../../../redux/ArticleUsers/user-selectors";
+import { isLoading } from "../../../redux/Article/article-selectors";
 import ArticleLoading from "../Article/ArticleLoading";
 
 const mapStateToProps = (state) => {

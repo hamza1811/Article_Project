@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMobile } from "@fortawesome/free-solid-svg-icons";
 import { addUser } from "../../../redux/ArticleUsers/user-action";
 import { connect } from "react-redux";
 // import SweetAlert from 'sweetalert2-react';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Loader from "react-loader-spinner";
+import ArticleLoading from "../Article/ArticleLoading";
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -18,15 +16,19 @@ function CreateAccount(props) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const userObj = {
       email,
       name,
       password,
     };
-    props.addUser(userObj);
-
+    await props.addUser(userObj);
+    resetForm();
+    // In order to sign in user while creating account
+    window.location.reload();
+  };
+  const resetForm = () => {
     setName("");
     setEmail("");
     setPassword("");
@@ -79,20 +81,8 @@ function CreateAccount(props) {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className='custom-control custom-checkbox mb-3 pt-4'>
-                  <input
-                    type='checkbox'
-                    className='custom-control-input'
-                    id='customCheck1'
-                  />
-                  <label
-                    className='custom-control-label'
-                    htmlFor='customCheck1'>
-                    Agreed Terms & Condition
-                  </label>
-                </div>
                 <button
-                  className='btn btn-lg btn-primary btn-block text-uppercase'
+                  className='btn btn-lg btn-primary btn-block text-uppercase mt-4'
                   type='submit'>
                   Sign Up
                 </button>

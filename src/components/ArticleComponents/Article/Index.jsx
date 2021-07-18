@@ -8,8 +8,8 @@ import { Editor } from "@tinymce/tinymce-react";
 import {
   fetchArticleById,
   isLoading,
-} from "../../../redux/Article/ArticleSelectors";
-import { loggedInUserData } from "../../../redux/ArticleUsers/UserSelectors";
+} from "../../../redux/Article/article-selectors";
+import { loggedInUserData } from "../../../redux/ArticleUsers/user-selectors";
 import ArticleLoading from "./ArticleLoading";
 
 const mapDispatchToProps = (dispatch) => {

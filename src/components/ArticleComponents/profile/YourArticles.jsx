@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { deleteArticle } from "../../../redux/Article/article-action";
-import { isLoading } from "../../../redux/Article/ArticleSelectors";
+import { isLoading } from "../../../redux/Article/article-selectors";
 import ArticleLoading from "../Article/ArticleLoading";
 import { Heading } from "../Article/FtechArticles";
 

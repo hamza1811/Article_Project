@@ -6,7 +6,7 @@ import DOMPurify from "dompurify";
 import {
   fetchAllArticles,
   isLoading,
-} from "../../../redux/Article/ArticleSelectors";
+} from "../../../redux/Article/article-selectors";
 import ArticleLoading from "./ArticleLoading";
 // import { styles } from "../../../styles";
 import styled from "styled-components";
