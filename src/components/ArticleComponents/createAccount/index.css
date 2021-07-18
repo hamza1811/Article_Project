@@ -1,0 +1,14 @@
+.password-wrapper {
+  /* border: 1px solid red; */
+  position: relative;
+}
+.eye-icon {
+  position: absolute;
+  top: 65px;
+  right: 10px;
+}
+
+.eye-icon:hover {
+  cursor: pointer;
+  color: #04060f;
+}
