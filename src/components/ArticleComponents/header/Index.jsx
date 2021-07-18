@@ -6,7 +6,7 @@ import {
   userSigingOut,
 } from "../../../redux/ArticleUsers/user-action";
 
-import { fetchAllArticles } from "../../../redux/Article/ArticleSelectors";
+import { fetchAllArticles } from "../../../redux/Article/article-selectors";
 import "./index.css";
 
 const mapStateToProps = (state) => {
@@ -158,7 +158,11 @@ function Header(props) {
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <a className='nav-link' onClick={signOutHandler}>
+                  <a
+                    className='nav-link'
+                    onClick={signOutHandler}
+                    href='/'
+                    style={{ cursor: "pointer" }}>
                     Log Out
                   </a>
                 </li>

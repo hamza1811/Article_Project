@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchAllArticles } from "../../../redux/Article/ArticleSelectors";
-import { loggedInUserData } from "../../../redux/ArticleUsers/UserSelectors";
+import { fetchAllArticles } from "../../../redux/Article/article-selectors";
+import { loggedInUserData } from "../../../redux/ArticleUsers/user-selectors";
 
 const mapStateToProps = (state) => {
   return {

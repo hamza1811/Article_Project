@@ -4,7 +4,7 @@ import DOMPurify from "dompurify";
 import {
   fetchArticleById,
   isLoading,
-} from "../../../redux/Article/ArticleSelectors";
+} from "../../../redux/Article/article-selectors";
 import ArticleLoading from "./ArticleLoading";
 import DisqusComment from "../../DisqusComment";
 import styled from "styled-components";

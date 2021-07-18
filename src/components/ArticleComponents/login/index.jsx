@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 // import Swal from "sweetalert2";
 import { authUser } from "../../../redux/ArticleUsers/user-action";
-import { isUserAuthenticated } from "../../../redux/ArticleUsers/UserSelectors";
-import { isLoading } from "../../../redux/Article/ArticleSelectors";
+import { isUserAuthenticated } from "../../../redux/ArticleUsers/user-selectors";
+import { isLoading } from "../../../redux/Article/article-selectors";
 
 import { styles } from "../../../styles";
 import ArticleLoading from "../Article/ArticleLoading";
