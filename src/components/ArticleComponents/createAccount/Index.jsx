@@ -6,6 +6,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./index.css";
+import Swal from "sweetalert2";
 const mapDispatchToProps = (dispatch) => {
   return {
     addUser: (user) => dispatch(addUser(user)),
@@ -29,11 +30,19 @@ function CreateAccount(props) {
       name,
       password,
     };
-    await props.addUser(userObj);
-    resetForm();
-    // In order to sign in user while creating account
-    window.location.reload();
+    const result = await props.addUser(userObj);
+    if (result.status === 200) {
+      resetForm();
+      window.location.reload(); // In order to sign in user while creating account
+    } else if (result.status === 400) {
+      showErrorMessage(result.message);
+    }
   };
+
+  const showErrorMessage = (message) => {
+    return Swal.fire("Oops!", message, "error");
+  };
+
   const resetForm = () => {
     setName("");
     setEmail("");

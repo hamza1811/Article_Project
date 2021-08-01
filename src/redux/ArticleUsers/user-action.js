@@ -8,82 +8,93 @@ import {
 import { ARTICLES_FETCHING } from "../Article/article-actionType";
 import { auth } from "../../firebase";
 
-export const addUser = (user) => async (dispatch) => {
-    const fireAuthObj = fireDB.auth();
-    const { email, password, name } = user;
-    await fireAuthObj
-        .createUserWithEmailAndPassword(email, password)
-        .then((result) => {
-            result.user.updateProfile({
-                displayName: name,
-            });
-            Swal.fire("Success", "User Registered Successfully", "success");
-        })
-        .catch((error) => {
-            const { message } = error;
-            if (message) {
-                Swal.fire("Oops!", message, "error");
-            }
-        });
+const fireAuthObj = fireDB.auth();
+
+export const addUser = (user) => async () => {
+    try {
+        const { email, password, name } = user;
+        const result = await fireAuthObj.createUserWithEmailAndPassword(email, password);
+        await result.user.updateProfile({ displayName: name });
+        return {
+            status: 200,
+        }
+    }
+    catch (error) {
+        const { message } = error;
+        if (message)
+            Swal.fire("Oops!", message, "error");
+        return {
+            message,
+            status: 400, // Bad request
+        }
+    };
 };
 
 export const authUser = (email, password) => async (dispatch) => {
-    const fireAuthObj = fireDB.auth();
-    dispatch({ type: ARTICLES_FETCHING, payload: true });
-    await fireAuthObj
-        .signInWithEmailAndPassword(email, password)
-        .then((result) => {
-            Swal.fire("Success", "User Logged In Successfully", "success");
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-        })
-        .catch((error) => {
-            const { message } = error;
-            Swal.fire("Oops!", message, "error");
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-        });
+    try {
+        dispatch({ type: ARTICLES_FETCHING, payload: true });
+        await fireAuthObj.signInWithEmailAndPassword(email, password);
+        dispatch({ type: ARTICLES_FETCHING, payload: false });
+        return {
+            status: 200,
+        }
+    }
+    catch (error) {
+        dispatch({ type: ARTICLES_FETCHING, payload: false });
+        const { message } = error;
+        return {
+            message,
+            status: 400, // Bad request
+        }
+    };
 };
 
 export const updateUserData = (userData) => async (dispatch) => {
-    const fireAuthObj = fireDB.auth();
-    const { uid, name } = userData;
-    dispatch({ type: ARTICLES_FETCHING, payload: true });
-    await fireAuthObj.currentUser
-        .updateProfile({
+    try {
+        const { name } = userData;
+        dispatch({ type: ARTICLES_FETCHING, payload: true });
+        await fireAuthObj.currentUser.updateProfile({
             displayName: name,
         })
-        .then(() => {
-            Swal.fire("Success", "Porfile updated", "success");
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-        })
-        .catch((error) => {
-            const { message } = error;
-            Swal.fire("Oops!", message, "error");
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-        });
+        dispatch({ type: ARTICLES_FETCHING, payload: false });
+        return {
+            status: 200,
+        }
+    }
+    catch (error) {
+        dispatch({ type: ARTICLES_FETCHING, payload: false });
+        const { message } = error;
+        return {
+            message,
+            status: 400, // Bad request
+        }
+    };
 };
 
-export const isUserLoggedIn = () => async (dispatch) => {
-    dispatch({ type: ARTICLES_FETCHING, payload: true });
-    await auth.onAuthStateChanged((user) => {
-        if (user) {
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-            dispatch({ type: CHECK_USER_IS_LOGGED_IN, payload: user.displayName });
-            dispatch({ type: SET_USER_DATA, payload: user });
-        } else {
-            dispatch({ type: ARTICLES_FETCHING, payload: false });
-        }
-    });
+export const isUserLoggedIn = () => (dispatch) => {
+    try {
+        dispatch({ type: ARTICLES_FETCHING, payload: true });
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                dispatch({ type: ARTICLES_FETCHING, payload: false });
+                dispatch({ type: CHECK_USER_IS_LOGGED_IN, payload: user.displayName });
+                dispatch({ type: SET_USER_DATA, payload: user });
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+        dispatch({ type: ARTICLES_FETCHING, payload: false });
+
+    }
 };
 
 export const userSigingOut = () => async (dispatch) => {
-    await auth
-        .signOut()
-        .then((result) => {
-            dispatch({ type: IS_SIGN_OUT_SUCCESS, payload: "" });
-            dispatch({ type: SET_USER_DATA, payload: "" });
-            Swal.fire("Success", "Signed Out Successfully", "success");
-        })
-        .catch((error) => {
-            Swal.fire("Oops!", "Something went wrong", "error");
-        });
+    try {
+        await auth.signOut();
+        dispatch({ type: IS_SIGN_OUT_SUCCESS, payload: "" });
+        dispatch({ type: SET_USER_DATA, payload: "" });
+    } catch (error) {
+        console.log(error)
+    }
 };

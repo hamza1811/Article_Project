@@ -11,6 +11,7 @@ import {
 } from "../../../redux/Article/article-selectors";
 import { loggedInUserData } from "../../../redux/ArticleUsers/user-selectors";
 import ArticleLoading from "./ArticleLoading";
+import Swal from "sweetalert2";
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -25,6 +26,7 @@ const mapStateToProps = (state, props) => {
     Article: fetchArticleById(state, ArticleId),
     userData: loggedInUserData(state),
     isLoading: isLoading(state),
+    isNewArticleAdded: state.Article.IsNewArticleAdded,
   };
 };
 
@@ -37,16 +39,18 @@ function AddArticle(props) {
   const [authorName, setAuthorName] = useState(
     props.userData.displayName ? props.userData.displayName : ""
   );
-  const [uid, setUid] = useState(props.userData.uid);
   const [ArticleText, setArticleText] = useState(
     Article ? Article.ArticleText : ""
   );
+  const [uid, setUid] = useState(props.userData.uid);
 
   const [ArticleTitle, setArticleTitle] = useState(
     Article ? Article.ArticleTitle : ""
   );
+
   const publishDate = new Date();
-  const submitHandler = (e) => {
+
+  const submitHandler = async (e) => {
     e.preventDefault();
     const ArticleData = {
       uid,
@@ -56,7 +60,11 @@ function AddArticle(props) {
       ArticleText,
       publishDate,
     };
-    props.addArticle(ArticleData);
+    await props.addArticle(ArticleData);
+    // console.log({ result });
+    // if (result) setIsNewArticleAdded(true);
+    // else setIsNewArticleAdded(false);
+
     resetForm();
   };
   const updateHandler = async (e) => {
