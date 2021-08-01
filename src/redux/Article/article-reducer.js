@@ -11,7 +11,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 ArticleData: action.payload,
-            };
+            }
         case ARTICLES_FETCHING:
             return {
                 ...state,

@@ -4,15 +4,8 @@ import Swal from "sweetalert2";
 
 const connection = fireDB.database().ref("/articleCollection");
 
-export const addArticle = (formData) => async dispatch => {
-    await connection.push(formData, (error) => {
-        if (!error) {
-            Swal.fire("Success", "Article added Successfully", "success");
-        }
-        else {
-            Swal.fire("Oops", "Article couldn't save", "error");
-        }
-    })
+export const addArticle = (formData) => async () => {
+    await connection.push(formData);
 }
 
 export const updateArticle = (updatedFormData, ArticleId) => async dispatch => {
@@ -25,12 +18,12 @@ export const updateArticle = (updatedFormData, ArticleId) => async dispatch => {
             dispatch({ type: ARTICLES_FETCHING, payload: false })
             Swal.fire("Oops!", "Article couldn't updated", "warning");
         }
-    }).then(res => res, error => error)
+    });
 }
 
-export const fetchArticles = () => async dispatch => {
+export const fetchArticles = () => dispatch => {
     dispatch({ type: ARTICLES_FETCHING, payload: true })
-    await connection.on('value', snapchat => {
+    connection.on('value', snapchat => {
         const duplicateArray = snapchat.val()
 
         const originalArray = []
@@ -46,12 +39,6 @@ export const fetchArticles = () => async dispatch => {
     })
 }
 
-export const deleteArticle = (ArticleId) => async => {
-    connection.child(ArticleId).remove((error) => {
-        if (!error) {
-            Swal.close("Deleted Successfully")
-        } else {
-            Swal.fire("Oops", "Something went wrong", "error")
-        }
-    })
+export const deleteArticle = (ArticleId) => async () => {
+    await connection.child(ArticleId).remove();
 }

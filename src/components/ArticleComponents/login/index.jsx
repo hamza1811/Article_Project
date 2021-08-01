@@ -27,7 +27,20 @@ function Login(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await props.authUser(email, password);
+    const result = await props.authUser(email, password);
+    if (result.status === 200) {
+      showSuccessMessage();
+    } else if (result.status === 400) {
+      showErrorMessage(result.message);
+    }
+  };
+
+  const showErrorMessage = (message) => {
+    return Swal.fire("Oops!", message, "error");
+  };
+
+  const showSuccessMessage = () => {
+    return Swal.fire("Success", "User Logged In Successfully", "success");
   };
 
   React.useEffect(() => {

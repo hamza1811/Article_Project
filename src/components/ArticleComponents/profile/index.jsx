@@ -7,6 +7,7 @@ import CountOfYourArticle from "./CountOfYourArticle";
 import { loggedInUserData } from "../../../redux/ArticleUsers/user-selectors";
 import { isLoading } from "../../../redux/Article/article-selectors";
 import ArticleLoading from "../Article/ArticleLoading";
+import Swal from "sweetalert2";
 
 const mapStateToProps = (state) => {
   return {
@@ -27,14 +28,29 @@ function MyProfile(props) {
   const [email, setEmail] = React.useState(userDetails.email);
   const [isNameReadOnly, setIsNameReadOnly] = React.useState(true);
   const [isEmailReadOnly, setIsEmailReadOnly] = React.useState(true);
-  const updateHandler = (value) => {
+
+  const updateHandler = async (value) => {
     const userData = {
       uid: userDetails.uid,
       key: value,
       name,
     };
-    props.updateUserData(userData);
+    const result = await props.updateUserData(userData);
+    if (result.status === 200) {
+      showSuccessMessage();
+    } else if (result.status === 400) {
+      showErrorMessage(result.message);
+    }
   };
+
+  const showErrorMessage = (message) => {
+    return Swal.fire("Oops!", message, "error");
+  };
+
+  const showSuccessMessage = () => {
+    return Swal.fire("Success", "Porfile updated", "success");
+  };
+
   return props.isLoading ? (
     <ArticleLoading />
   ) : (
