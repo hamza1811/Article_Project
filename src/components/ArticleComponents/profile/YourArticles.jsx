@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBlog, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { deleteArticle } from "../../../redux/Article/article-action";
 import { isLoading } from "../../../redux/Article/article-selectors";
 import ArticleLoading from "../Article/ArticleLoading";
@@ -61,6 +61,12 @@ function YourArticles(props) {
                   className='link-light'>
                   Delete <FontAwesomeIcon icon={faTrash} />
                 </Link>
+                <p className='link-light  pt-2'>
+                  Status:{" "}
+                  <span style={{ color: "#9ea7ad" }}>
+                    {Article.articleStatus}
+                  </span>
+                </p>
               </div>
             </div>
           </div>

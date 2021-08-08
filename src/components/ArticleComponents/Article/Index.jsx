@@ -44,6 +44,8 @@ function AddArticle(props) {
   );
   const [uid, setUid] = useState(props.userData.uid);
 
+  const articleStatus = "Pending Review";
+
   const [ArticleTitle, setArticleTitle] = useState(
     Article ? Article.ArticleTitle : ""
   );
@@ -58,15 +60,30 @@ function AddArticle(props) {
       email,
       authorName,
       ArticleText,
+      articleStatus,
       publishDate,
     };
-    await props.addArticle(ArticleData);
-    // console.log({ result });
-    // if (result) setIsNewArticleAdded(true);
-    // else setIsNewArticleAdded(false);
-
+    const result = await props.addArticle(ArticleData);
+    if (result.status === 200) {
+      showSuccessMessage();
+    } else if (result.status === 400) {
+      showErrorMessage(result.message);
+    }
     resetForm();
   };
+
+  const showErrorMessage = (message) => {
+    return Swal.fire("Oops!", message, "error");
+  };
+
+  const showSuccessMessage = () => {
+    return Swal.fire(
+      "Congratualtions!",
+      "Article sent for Review. Once it gets approve, It will display on frontend",
+      "info"
+    );
+  };
+
   const updateHandler = async (e) => {
     try {
       e.preventDefault();
