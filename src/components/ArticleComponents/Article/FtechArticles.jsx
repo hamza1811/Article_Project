@@ -32,38 +32,42 @@ export const Heading = styled.h1`
   }
 `;
 
+export const showFetchArticle = (Article) => {
+  const ArticleText = Article.ArticleText.substr(0, 300);
+  return (
+    <div className='container'>
+      <Heading>{Article.ArticleTitle}</Heading>
+      <p className='lead'>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(`${ArticleText}`),
+          }}
+        />
+        <Link to={`/full-article/${Article.id}`} className='link-light'>
+          Learn More
+        </Link>
+      </p>
+    </div>
+  );
+};
+
 function FtechArticles(props) {
+  const PUBLISHED = "Published";
   React.useEffect(() => {
     props.fetchArticles();
   }, []);
 
-  const showFetchArticle = (Article) => {
-    const ArticleText = Article.ArticleText.substr(0, 300);
-    return (
-      <div className='container'>
-        <Heading>{Article.ArticleTitle}</Heading>
-        <p className='lead'>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(`${ArticleText}`),
-            }}
-          />
-          <Link to={`/full-article/${Article.id}`} className='link-light'>
-            Learn More
-          </Link>
-        </p>
-      </div>
-    );
-  };
-
   return (
     <div>
       {props.isLoading && <ArticleLoading />}
-      {props.Articles.map((Article, index) => (
-        <div key={index}>
-          <div className='mt-5 mb-5'>{showFetchArticle(Article)}</div>
-        </div>
-      ))}
+      {props.Articles.map(
+        (Article, index) =>
+          Article.articleStatus === PUBLISHED && (
+            <div key={index}>
+              <div className='mt-5 mb-5'>{showFetchArticle(Article)}</div>
+            </div>
+          )
+      )}
     </div>
   );
 }

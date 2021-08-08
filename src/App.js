@@ -14,6 +14,7 @@ import YourArticles from './components/ArticleComponents/profile/YourArticles';
 import EditArticle from './components/ArticleComponents/Article/EditArticle';
 import "./App.css";
 import ScrollToTop from './components/ScrollToTop';
+import PendingArticles from './components/ArticleComponents/Admin/PendingArticles';
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.user.loggedInUserName
@@ -54,6 +55,11 @@ function App({ isAuthenticated }) {
           <PrivateRoute
             path="/edit-article/:id"
             component={EditArticle}
+            isAuthenticated={isAuthenticated}
+          />
+          <PrivateRoute
+            path="/pending-article"
+            component={PendingArticles}
             isAuthenticated={isAuthenticated}
           />
         </Switch>

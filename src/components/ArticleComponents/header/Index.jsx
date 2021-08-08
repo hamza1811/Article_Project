@@ -12,6 +12,7 @@ import "./index.css";
 const mapStateToProps = (state) => {
   return {
     authName: state.user.loggedInUserData.displayName,
+    isAdminRole: state.user.isAdmin,
     uid: state.user.loggedInUserData.uid,
     Articles: fetchAllArticles(state),
   };
@@ -157,6 +158,13 @@ function Header(props) {
                     Your Articles
                   </Link>
                 </li>
+                {props.isAdminRole && (
+                  <li className='nav-item'>
+                    <Link className='nav-link' to={`/pending-article`}>
+                      Pending Articles
+                    </Link>
+                  </li>
+                )}
                 <li className='nav-item'>
                   <a
                     className='nav-link'
