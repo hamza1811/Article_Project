@@ -93,6 +93,7 @@ function AddArticle(props) {
         email,
         authorName,
         ArticleText,
+        articleStatus,
         publishDate,
       };
       await props.updateArticle(ArticleData, Article.id);

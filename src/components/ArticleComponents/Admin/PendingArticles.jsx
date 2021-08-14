@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { updateArticleStatus } from "../../../redux/Article/article-action";
 import {
   fetchAllArticles,
@@ -25,6 +24,7 @@ const mapDispatchToProps = (dispatch) => {
 function PendingArticles(props) {
   const REVIEW_PENDING = "Pending Review";
   const DECLINEED = "Declined";
+  let flagToCheckArticles = false;
 
   const updateArticleStatusHandler = async (status, ArticleId) => {
     await props.updateArticleStatus(status, ArticleId);
@@ -33,38 +33,49 @@ function PendingArticles(props) {
   return (
     <div className='container'>
       {props.isLoading && <ArticleLoading />}
-      {props.Articles.map(
-        (Article, index) =>
-          (Article.articleStatus === REVIEW_PENDING ||
-            Article.articleStatus === DECLINEED) && (
-            <div key={index}>
-              <div className='mt-5 mb-5'>
-                {showFetchArticle(Article)}
-                <div>
-                  Author: {Article.authorName}
-                  <br />
-                  Update Status:{" "}
-                  <Link
-                    to='#'
+      {props.Articles.map((Article, index) =>
+        Article.articleStatus === REVIEW_PENDING ||
+        Article.articleStatus === DECLINEED ? (
+          <div key={index}>
+            <div className='mt-5 mb-5'>
+              {showFetchArticle(Article)}
+              <div className='container'>
+                <p className='lead mb-0'>
+                  <span className='font-weight-bold'>Author:</span>{" "}
+                  <span>{Article.authorName}</span>
+                </p>
+                <p className='lead mb-0'>
+                  <span className='font-weight-bold'>Update Status:&nbsp;</span>
+                  <button
                     onClick={(e) =>
                       updateArticleStatusHandler("Published", Article.id)
-                    }>
-                    Publish Article
-                  </Link>
-                  &nbsp;/&nbsp;
-                  <Link
-                    to='#'
+                    }
+                    className='btn btn-success mr-1'>
+                    Publish
+                  </button>
+                  <button
                     onClick={(e) =>
                       updateArticleStatusHandler("Declined", Article.id)
-                    }>
-                    Decline Article
-                  </Link>
-                  <br />
-                  Current Status: {Article.articleStatus}
-                </div>
+                    }
+                    className='btn btn-danger'>
+                    Decline
+                  </button>
+                </p>
+                <p className='lead'>
+                  <span className='font-weight-bold'>Current Status:</span>
+                  <span> {Article.articleStatus}</span>
+                </p>
               </div>
             </div>
-          )
+          </div>
+        ) : (
+          (flagToCheckArticles = true)
+        )
+      )}
+      {flagToCheckArticles && (
+        <blockquote className='blockquote text-center'>
+          <p className='mt-2'>No Pending Article :)</p>
+        </blockquote>
       )}
     </div>
   );
